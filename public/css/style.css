@@ -1,0 +1,71 @@
+h1{
+    color: red;
+    font-size: 20px;
+}
+ul{
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+}
+.container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0px 50px;
+}
+li{
+    padding-right: 10px;
+    font-weight: bold;
+    font-size: 20px;
+}
+li:hover{
+    text-decoration: underline;
+    color: rgb(3, 3, 94);
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+p{
+    font-weight: bold;
+    color: rgb(3, 3, 94);
+    font-size: 20px;
+}
+@media only screen and (max-width: 400px) {
+    ul {
+        display: none;
+    }
+    p{
+            display: flex;
+            align-self: center;
+    }
+  }
+
+  @media only screen and (min-width : 500px) and (max-width: 640px) {
+    .container{
+        margin: 0px 30px;
+    }
+  }
+  @media only screen and (min-width : 400px) and (max-width: 500px){
+    li {
+        font-size: 15px;
+    }
+    p{
+        font-size: 15px;
+    }
+    .container{
+        margin: 0px 20px;
+    }
+  }
+ .input{
+    padding: 10px;
+    border: 2px solid black;
+    border-radius: 5px;
+    margin: 2px;
+ }
+ .form-container{
+    display: flex;
+    flex-direction: column;
+    
+ }
