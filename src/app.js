@@ -127,5 +127,5 @@ app.post("/register",async(req,res)=>{
 
 
 app.listen(port,() =>{
-    console.log("connection successful to port "+port+".....")
+    console.log("connection successful to port number "+port+".....")
 })
