@@ -35,7 +35,7 @@ const employSchema = new mongoose.Schema({
         }
     }]
 })
-console.log(process.env.SECRET_KEY)
+// console.log(process.env.SECRET_KEY)
 
 employSchema.pre("save",async function(next) {
     if(this.isModified("password")){

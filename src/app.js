@@ -6,6 +6,8 @@ const hbs = require("hbs")
 const EmployersData = require("./model/registration")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const cookieParser = require("cookie-parser")
+const auth = require("./middleware/auth")
 
 const app = express()
 const port = process.env.PORT || 3000 
@@ -13,6 +15,7 @@ const staticPath = path.join(__dirname,"../public")
 const viewPath = path.join(__dirname,"../templates/views")
 const partialsPath = path.join(__dirname,"../templates/partials")
 app.use(express.static(staticPath))
+app.use(cookieParser())
 app.set("view engine","hbs")
 app.set("views",viewPath)
 hbs.registerPartials(partialsPath)
@@ -24,14 +27,38 @@ app.get('/',(req,res)=>{
 app.get('/login',(req,res)=>{
     res.render("login")
 })
+app.get("/logout",auth, async(req,res)=>{
+    try {
+        // console.log(req.logInEmployee,'loginemployeeeeeee')
+        res.clearCookie("jwt")
+        // console.log("logout success") 
+
+        //logout for single user
+        // req.logInEmployee.tokens = req.logInEmployee.tokens.filter(elem => elem.token !== req.token)   
+
+        //logout all users
+        req.logInEmployee.tokens = []
+        await req.logInEmployee.save()
+        res.render("login")
+    } catch (error) {
+        res.status(500).send("log out error")
+    }
+})
+app.get('/secret',auth,(req,res)=>{
+    res.render("secret")
+})
 app.post('/login',async(req,res)=>{
     try{
         const {email, password} = req.body
         const employee = await EmployersData.findOne({email})
         const  isValid = await bcrypt.compare(password, employee.password)
-        console.log(isValid)
+        // console.log(isValid)
         const token = await employee.generateToken()
-        console.log(token,"login")
+        // console.log(token,"login")
+        res.cookie("jwt",token,{
+            expires: new Date(Date.now()+600000),
+            httpOnly:true
+        })
         isValid ? res.render("index") : res.status(400).send("invalid credentials")
     }
     catch(e){
@@ -50,6 +77,11 @@ app.post("/register",async(req,res)=>{
             console.log(addEmployee,'addemployee')
             const token = await addEmployee.generateToken()
             console.log(token)
+            res.cookie("jwt",token,{
+                expires: new Date(Date.now()+120000),
+                httpOnly:true
+            })
+            // console.log(res.cookie("jwt",token),'this here is the cookie')
             const employee = await addEmployee.save()
             console.log(employee,"employee")
             res.status(200).render("index")
